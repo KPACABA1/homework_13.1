@@ -37,7 +37,13 @@ class Product:
     # Создаю геттер для вывода цены
     @property
     def printing_price(self):
+        return self.__price
+
+    # Создаю сеттер для вывода цены
+    @printing_price.setter
+    def printing_price(self, new_prise):
         """Если цена ниже или равно 0, то верну сообщение, если все нормально, то верну цену"""
-        if self.__price > 0:
-            return self.__price
-        return "Цена введена некорректная"
+        if new_prise > 0:
+            self.__price = new_prise
+        else:
+            return "Цена введена некорректная"
