@@ -1,3 +1,5 @@
+from functions import reading_a_file
+
 class Category:
     """Класс имеет свойства: название, описание, товары(приватный). Так же атрибуты класса: общее количество категорий
     и общее количество уникальных продуктов"""
@@ -32,7 +34,34 @@ class Product:
     # Добавил класс-метод который позволяет создавать новые экземпляры класса
     @classmethod
     def new_product(cls, new_title, new_description, new_price, new_quantity_in_stock):
-        return cls(new_title, new_description, new_price, new_quantity_in_stock)
+        # Реализую проверку наличия такого же товара
+        # проверяю есть ли новый товар среди "Смартфонов" из файла json
+        for i in range(len(reading_a_file()[0]["products"])):
+            if new_title in reading_a_file()[0]["products"][i].values():
+                # Если такой товар уже есть, то добавляю к нему количество старого товара
+                new_quantity_in_stock += reading_a_file()[0]["products"][i]["quantity"]
+                # Если цена выше у старого товара, то меняю цену нового
+                if reading_a_file()[0]["products"][i]["price"] > new_price:
+                    highest_price = reading_a_file()[0]["products"][i]["price"]
+                    return cls(new_title, new_description, highest_price, new_quantity_in_stock)
+                # Если у нового товара цена выше, то цену не меняю
+                else:
+                    return cls(new_title, new_description, new_price, new_quantity_in_stock)
+        # проверяю есть ли новый товар среди "Телевизоров" из файла json
+        for i in range(len(reading_a_file()[1]["products"])):
+            if new_title in reading_a_file()[1]["products"][i].values():
+                # Если такой товар уже есть, то добавляю к нему количество старого товара
+                new_quantity_in_stock += reading_a_file()[1]["products"][i]["quantity"]
+                # Если цена выше у старого товара, то меняю цену нового
+                if reading_a_file()[1]["products"][i]["price"] > new_price:
+                    highest_price = reading_a_file()[1]["products"][i]["price"]
+                    return cls(new_title, new_description, highest_price, new_quantity_in_stock)
+                # Если у нового товара цена выше, то цену не меняю
+                else:
+                    return cls(new_title, new_description, new_price, new_quantity_in_stock)
+            # Если товар новый, то просто создаю новый экземпляр класса
+            else:
+                return cls(new_title, new_description, new_price, new_quantity_in_stock)
 
     # Создаю геттер для вывода цены
     @property
