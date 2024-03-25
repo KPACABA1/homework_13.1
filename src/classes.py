@@ -71,8 +71,17 @@ class Product:
     # Создаю сеттер для вывода цены
     @printing_price.setter
     def printing_price(self, new_prise):
-        """Если цена ниже или равно 0, то верну сообщение, если все нормально, то верну цену"""
-        if new_prise > 0:
-            self.__price = new_prise
+        """Если цена ниже или равно 0, то верну сообщение, если все нормально, то проверю понижение цены"""
+        if new_prise < 0:
+            print("Цена введена некорректная")
         else:
-            return "Цена введена некорректная"
+            # Если старая цена больше новой, то запрошу подтверждение понижения цены
+            if self.__price > new_prise:
+                print("Подтвердите понижение стоимости написав 'Y' или 'N', если цену понижать не надо" )
+                confirmation = input()
+                if confirmation.lower() == "y":
+                    self.__price = new_prise
+                elif confirmation.lower() == "n":
+                    return self.__price
+            else:
+                self.__price = new_prise
