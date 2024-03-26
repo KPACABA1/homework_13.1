@@ -22,6 +22,14 @@ class Category:
         """Создал сеттер для добавления нового продукта в список продуктов"""
         self.__products.append(new_product)
 
+    def __str__(self):
+        """Вывожу данные в формате 'Название категории, количество продуктов: 200 шт.'"""
+        # Считаю сколько товаров в категории
+        quantity = 0
+        for i in self.__products:
+            quantity += i["quantity"]
+        return f"{self.title}, количество продуктов:{quantity} шт."
+
 
 class Product:
     """Класс имеет свойства: название, описание, цена(приватный) и количество в наличии"""
@@ -81,3 +89,12 @@ class Product:
                     return self.__price
             else:
                 self.__price = new_prise
+
+    def __str__(self):
+        """Вывожу информацию в формате 'Название продукта, 80 руб. Остаток: 15 шт.'"""
+        return f"{self.title}, {self.__price} руб. Остаток:{self.quantity_in_stock} шт."
+
+    def __add__(self, other):
+        """Складываю объекты между собой таким образом, чтобы результат выполнения сложения двух продуктов был сложением
+         сумм, умноженных на количество на складе."""
+        return self.__price * self.quantity_in_stock + other.__price * other.quantity_in_stock
