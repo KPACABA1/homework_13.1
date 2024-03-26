@@ -1,4 +1,4 @@
-from functions import reading_a_file
+from src.functions import reading_a_file
 
 class Category:
     """Класс имеет свойства: название, описание, товары(приватный). Так же атрибуты класса: общее количество категорий
