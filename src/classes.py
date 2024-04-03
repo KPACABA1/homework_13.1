@@ -16,12 +16,20 @@ class Category:
     def printing_products(self):
         """Создал геттер для вывода списка продуктов"""
         for sequence in self.__products:
-            print(f"{sequence['name']}, {sequence["price"]} руб. Остаток: {sequence["quantity"]}")
+            # Сначала я работал с файлом JSON, поэтому теперь я проверяю данные из файла или нет
+            if isinstance(sequence, Product):
+                print(sequence)
+            else:
+                print(f"{sequence['name']}, {sequence["price"]} руб. Остаток: {sequence["quantity"]}")
 
     @printing_products.setter
     def printing_products(self, new_product):
-        """Создал сеттер для добавления нового продукта в список продуктов"""
-        self.__products.append(new_product)
+        """Создал сеттер для добавления нового продукта в список продуктов и проверяю, является ли он экземпляром класса
+        Product или его дочерними классами, если нет то не добавляю"""
+        if isinstance(new_product, Product):
+            self.__products.append(new_product)
+        else:
+            print("")
 
     def __str__(self):
         """Вывожу данные в формате 'Название категории, количество продуктов: 200 шт.'"""
