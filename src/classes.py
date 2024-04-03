@@ -1,5 +1,6 @@
 from src.functions import reading_a_file
 
+
 class Category:
     """Класс имеет свойства: название, описание, товары(приватный). Так же атрибуты класса: общее количество категорий
     и общее количество уникальных продуктов"""
@@ -33,11 +34,12 @@ class Category:
 
 class Product:
     """Класс имеет свойства: название, описание, цена(приватный) и количество в наличии"""
-    def __init__(self, title, description, price, quantity_in_stock):
+    def __init__(self, title, description, price, quantity_in_stock, colour=None):
         self.title = title
         self.description = description
         self.__price = price
         self.quantity_in_stock = quantity_in_stock
+        self.colour = colour
 
     @classmethod
     def new_product(cls, new_title, new_description, new_price, new_quantity_in_stock):
@@ -96,5 +98,34 @@ class Product:
 
     def __add__(self, other):
         """Складываю объекты между собой таким образом, чтобы результат выполнения сложения двух продуктов был сложением
-         сумм, умноженных на количество на складе."""
-        return self.__price * self.quantity_in_stock + other.__price * other.quantity_in_stock
+         сумм, умноженных на количество на складе. При этом проверяя что товары складываются только из этого класса"""
+        if type(self) == type(other):
+            return self.__price * self.quantity_in_stock + other.__price * other.quantity_in_stock
+        else:
+            raise TypeError
+
+
+class Smartphone(Product):
+    """Создаю дочерний класс от класса Products и добавляю в него:
+    efficiency - производительность
+    model - модель
+    amount_of_internal_memory - объем встроенной памяти
+    colour - добавил в родительский класс"""
+    def __init__(self, title, description, price, quantity_in_stock, efficiency, model, amount_of_internal_memory,
+                 colour):
+        super().__init__(title, description, price, quantity_in_stock, colour)
+        self.efficiency = efficiency
+        self.model = model
+        self.amount_of_internal_memory = amount_of_internal_memory
+        self.colour = colour
+
+
+class LawnGrass(Product):
+    """Создаю дочерний класс от класса Products и добавляю в него:
+    country_of_origin - страна производитель
+    germination_period - срок прорастания
+    colour - добавил в родительский класс"""
+    def __init__(self, title, description, price, quantity_in_stock, country_of_origin, germination_period, colour):
+        super().__init__(title, description, price, quantity_in_stock, colour)
+        self.country_of_origin = country_of_origin
+        self.germination_period = germination_period
