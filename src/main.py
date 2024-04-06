@@ -1,5 +1,5 @@
 from functions import reading_a_file
-from classes import Category, Product, Smartphone, LawnGrass
+from classes import Category, Product, Smartphone, LawnGrass, Order
 
 # Присваиваю первой категории из файла "products.json"(смартфонам) класс Category
 category_1 = Category(reading_a_file()[0]["name"], reading_a_file()[0]["description"], reading_a_file()[0]["products"])
@@ -24,7 +24,3 @@ product_smartphone = Smartphone("Nokia", "Бронированный телеф�
 # Создаю ещё 1 новый товар(Газонная трава) от родительского класса Product
 product_lawn_grass = LawnGrass("White clover", "Один из самых лучших сортов газонной травы", 2500,
                                13, "Russia", "13 дней", "Green")
-
-
-
-
