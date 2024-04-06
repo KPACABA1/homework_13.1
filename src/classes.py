@@ -1,13 +1,29 @@
 from src.functions import reading_a_file
+from abc import ABC, abstractmethod
 
 
-class Category:
+class AbstractCategory(ABC):
+    """Создал абстрактный класс, просто для того, чтобы был"""
+    @abstractmethod
+    def __str__(self):
+        """То же самое с методом, просто сделал его абстрактным, чтобы был"""
+        pass
+
+
+class Mixin:
+    """Создал вывод в консоль о том, что был создан объект и его информацию"""
+    def __init__(self, *args, **kwargs):
+            print(self.__class__.__name__, *args, **kwargs)
+
+
+class Category(Mixin, AbstractCategory):
     """Класс имеет свойства: название, описание, товары(приватный). Так же атрибуты класса: общее количество категорий
     и общее количество уникальных продуктов"""
     total_number_of_categories = 1
     total_number_of_unique_products = 1
 
     def __init__(self, title, description, products):
+        super().__init__(title, description, products)
         self.title = title
         self.description = description
         self.__products = products
@@ -40,9 +56,18 @@ class Category:
         return f"{self.title}, количество продуктов:{quantity} шт."
 
 
-class Product:
+class AbstractProduct(ABC):
+    """Создал абстрактный класс для класса Product и его наследников"""
+    @abstractmethod
+    def __str__(self):
+        """Добавил этот абстрактный метод чтобы был(для задания)"""
+        pass
+
+
+class Product(Mixin, ABC):
     """Класс имеет свойства: название, описание, цена(приватный) и количество в наличии"""
     def __init__(self, title, description, price, quantity_in_stock, colour=None):
+        super().__init__(title, description, price, quantity_in_stock)
         self.title = title
         self.description = description
         self.__price = price
@@ -127,6 +152,11 @@ class Smartphone(Product):
         self.amount_of_internal_memory = amount_of_internal_memory
         self.colour = colour
 
+    def __str__(self):
+        """Создал этот метод только для того чтобы было что-то общее с классом Product, чтобы абстрактный класс работал
+        нормально"""
+        return self.title
+
 
 class LawnGrass(Product):
     """Создаю дочерний класс от класса Products и добавляю в него:
@@ -137,3 +167,21 @@ class LawnGrass(Product):
         super().__init__(title, description, price, quantity_in_stock, colour)
         self.country_of_origin = country_of_origin
         self.germination_period = germination_period
+
+    def __str__(self):
+        """Создал этот метод точно так же как в классе Smartphone"""
+        return self.title
+
+
+class Order(AbstractCategory):
+    """Класс выводит  на экран информацию о купленном товаре, сколько купили и итоговую цену
+    product: экземпляр класса Product или его дочерних классов
+    quantity_of_purchased_product: сколько товара хотят приобрести"""
+    def __init__(self, product, quantity_of_purchased_product):
+        self.product = product
+        self.quantity_of_purchased_product = quantity_of_purchased_product
+
+    def __str__(self):
+        """Вывожу то, что в описании класса"""
+        return (f"куплен {self.product.title}, {self.quantity_of_purchased_product} шт, "
+                f"{self.product.printing_price * int(self.quantity_of_purchased_product)}")
