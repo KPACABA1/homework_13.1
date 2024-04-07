@@ -63,8 +63,13 @@ class AbstractProduct(ABC):
         """Добавил этот абстрактный метод чтобы был(для задания)"""
         pass
 
+    @abstractmethod
+    def __repr__(self):
+        """Добавил второй абстрактный метод, так же, для того, чтобы был"""
+        pass
 
-class Product(Mixin, ABC):
+
+class Product(Mixin, AbstractProduct):
     """Класс имеет свойства: название, описание, цена(приватный) и количество в наличии"""
     def __init__(self, title, description, price, quantity_in_stock, colour=None):
         super().__init__(title, description, price, quantity_in_stock)
@@ -137,6 +142,10 @@ class Product(Mixin, ABC):
         else:
             raise TypeError
 
+    def __repr__(self):
+        """Добавил для того чтобы был"""
+        pass
+
 
 class Smartphone(Product):
     """Создаю дочерний класс от класса Products и добавляю в него:
@@ -152,11 +161,6 @@ class Smartphone(Product):
         self.amount_of_internal_memory = amount_of_internal_memory
         self.colour = colour
 
-    def __str__(self):
-        """Создал этот метод только для того чтобы было что-то общее с классом Product, чтобы абстрактный класс работал
-        нормально"""
-        return self.title
-
 
 class LawnGrass(Product):
     """Создаю дочерний класс от класса Products и добавляю в него:
@@ -167,10 +171,6 @@ class LawnGrass(Product):
         super().__init__(title, description, price, quantity_in_stock, colour)
         self.country_of_origin = country_of_origin
         self.germination_period = germination_period
-
-    def __str__(self):
-        """Создал этот метод точно так же как в классе Smartphone"""
-        return self.title
 
 
 class Order(AbstractCategory):
