@@ -41,8 +41,12 @@ class Category(Mixin, AbstractCategory):
     @printing_products.setter
     def printing_products(self, new_product):
         """Создал сеттер для добавления нового продукта в список продуктов и проверяю, является ли он экземпляром класса
-        Product или его дочерними классами, если нет то не добавляю"""
-        if isinstance(new_product, Product):
+        Product или его дочерними классами, если нет то не добавляю. Перед этим проверю что __product не равен 0,
+        если равен вызову ошибку"""
+        # Проверяю не равно ли количество товара 0, если равно то вызываю ошибку
+        if new_product.quantity_in_stock == 0:
+            raise ValueError("товар с нулевым количеством не может быть добавлен")
+        elif isinstance(new_product, Product):
             self.__products.append(new_product)
         else:
             print("")
@@ -54,6 +58,18 @@ class Category(Mixin, AbstractCategory):
         for i in self.__products:
             quantity += i["quantity"]
         return f"{self.title}, количество продуктов:{quantity} шт."
+
+    def calculating_average_price_of_product(self):
+        """Считаю среднюю цену на товары категории. Если в категории нет товаров и сумма всех товаров будет делиться на
+        ноль, то верну 0"""
+        try:
+            total_price = 0
+            for i in self.__products:
+                total_price += i["price"]
+            return total_price // len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
 
 
 class AbstractProduct(ABC):
@@ -173,13 +189,31 @@ class LawnGrass(Product):
         self.germination_period = germination_period
 
 
+class ShellException(Exception):
+    """Класс исключений, который проверяет не добавили ли в класс Order 0 товара"""
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else "товар с нулевым количеством не может быть добавлен"
+
+
 class Order(AbstractCategory):
     """Класс выводит  на экран информацию о купленном товаре, сколько купили и итоговую цену
     product: экземпляр класса Product или его дочерних классов
-    quantity_of_purchased_product: сколько товара хотят приобрести"""
+    quantity_of_purchased_product: сколько товара хотят приобрести
+    Перед тем как начать инициализацию я проверяю не равно ли количество товара 0"""
     def __init__(self, product, quantity_of_purchased_product):
-        self.product = product
-        self.quantity_of_purchased_product = quantity_of_purchased_product
+        # Проверка не равно ли количество товара 0
+        try:
+            if quantity_of_purchased_product != 0:
+                self.product = product
+                self.quantity_of_purchased_product = quantity_of_purchased_product
+                print("товар добавлен")
+            # Если количество товара равно 0, то вызываю ошибку
+            else:
+                raise ShellException("товар с нулевым количеством не может быть добавлен")
+        except ShellException as e:
+            print(e)
+        finally:
+            print("обработка добавления товара завершена")
 
     def __str__(self):
         """Вывожу то, что в описании класса"""
