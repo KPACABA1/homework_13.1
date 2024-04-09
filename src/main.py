@@ -1,5 +1,5 @@
 from functions import reading_a_file
-from classes import Category, Product, Smartphone, LawnGrass, Order
+from classes import Category, Product, Smartphone, LawnGrass, Order, ShellException
 
 # Присваиваю первой категории из файла "products.json"(смартфонам) класс Category
 category_1 = Category(reading_a_file()[0]["name"], reading_a_file()[0]["description"], reading_a_file()[0]["products"])
